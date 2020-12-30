@@ -1,7 +1,7 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller;
 
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto;
-import com.theredeemed.myactivityexpensetrackerservice.service.ActivityExpenseService;
+import com.theredeemed.myactivityexpensetrackerservice.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +15,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/activity-expense")
 @CrossOrigin(origins = "http://localhost:3000")
-public class ActivityExpenseController {
+public class ActivityController {
 
-    private final ActivityExpenseService activityExpenseService;
+    private final ActivityService activityService;
 
     @Autowired
-    public ActivityExpenseController(ActivityExpenseService activityExpenseService) {
-        this.activityExpenseService = activityExpenseService;
+    public ActivityController(ActivityService activityService) {
+        this.activityService = activityService;
     }
 
     @GetMapping
     public ResponseEntity<List<ActivityDto>> retrieveActivityList() {
-        List<ActivityDto> activityList = activityExpenseService.getActivityList();
+        List<ActivityDto> activityList = activityService.getActivityList();
         return new ResponseEntity<>(activityList, HttpStatus.OK);
     }
 }

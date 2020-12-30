@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class ActivityDto {
     String title;
     String description;
+    BigDecimal fee;
     BigDecimal balance;
     LocalDateTime updatedTimestamp;
 }
