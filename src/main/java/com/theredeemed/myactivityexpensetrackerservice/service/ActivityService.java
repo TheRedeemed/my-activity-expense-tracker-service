@@ -9,12 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -53,8 +47,12 @@ public class ActivityService {
 
     public ActivityDto createNewActivity(ActivityDto newActivity) {
         ActivityEntity activityEntity = ActivityConverter.toActivityEntity(newActivity);
-        log.debug("Saving activity entity");
-        activityRepository.save(activityEntity);
+        try{
+            log.debug("Saving activity entity");
+            activityRepository.save(activityEntity);
+        } catch (IllegalArgumentException | DataAccessException e) {
+            log.error(e.getMessage());
+        }
         return ActivityConverter.toActivityDto(activityEntity);
     }
 }
