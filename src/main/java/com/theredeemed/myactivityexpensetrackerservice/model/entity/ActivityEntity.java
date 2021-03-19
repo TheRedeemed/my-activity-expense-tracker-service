@@ -1,5 +1,7 @@
 package com.theredeemed.myactivityexpensetrackerservice.model.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 @Table(name = "ACTIVITY")
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ActivityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

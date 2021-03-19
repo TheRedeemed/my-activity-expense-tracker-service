@@ -4,18 +4,15 @@ import com.theredeemed.myactivityexpensetrackerservice.converter.ActivityConvert
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto;
 import com.theredeemed.myactivityexpensetrackerservice.model.entity.ActivityEntity;
 import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActivityRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ActivityService {
 //    static List<ActivityDto> activityList = new ArrayList<>(
 //            Arrays.asList(
@@ -44,6 +41,18 @@ public class ActivityService {
     }
 
     public List<ActivityDto> getActivityList() {
+        log.debug("Returning list of activities");
         return ActivityConverter.toActivityDtos(activityRepository.findAll());
+    }
+
+    public ActivityDto createNewActivity(ActivityDto newActivity) {
+        ActivityEntity activityEntity = ActivityConverter.toActivityEntity(newActivity);
+        try{
+            log.debug("Saving activity entity");
+            activityRepository.save(activityEntity);
+        } catch (IllegalArgumentException | DataAccessException e) {
+            log.error(e.getMessage());
+        }
+        return ActivityConverter.toActivityDto(activityEntity);
     }
 }
