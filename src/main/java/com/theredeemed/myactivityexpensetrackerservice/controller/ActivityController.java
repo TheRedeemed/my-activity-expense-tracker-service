@@ -6,13 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/activity")
+@RequestMapping("/api/v1/activities")
 @CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class ActivityController {
@@ -24,7 +24,7 @@ public class ActivityController {
         this.activityService = activityService;
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping
     public ResponseEntity<List<ActivityDto>> retrieveActivityList() {
         log.debug("Calling activity service to retrieve Activity List");
         List<ActivityDto> activityList = activityService.getActivityList();
@@ -32,8 +32,8 @@ public class ActivityController {
         return new ResponseEntity<>(activityList, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/new")
-    public ResponseEntity<ActivityDto> createActivity(@RequestBody @Validated ActivityDto newActivity) {
+    @PostMapping
+    public ResponseEntity<ActivityDto> createActivity(@Valid @RequestBody ActivityDto newActivity) {
         log.debug("Calling activity service to create activity : {}", newActivity);
         ActivityDto newlyCreatedActivity = activityService.createNewActivity(newActivity);
         log.debug("Retuning newly created activity : {}", newlyCreatedActivity);
