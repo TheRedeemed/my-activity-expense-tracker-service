@@ -1,6 +1,5 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller;
 
-import com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants;
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto;
 import com.theredeemed.myactivityexpensetrackerservice.service.ActivityService;
 import lombok.extern.slf4j.Slf4j;
