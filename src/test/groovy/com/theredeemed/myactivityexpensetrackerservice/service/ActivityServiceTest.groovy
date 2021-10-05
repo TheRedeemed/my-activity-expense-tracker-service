@@ -12,7 +12,7 @@ class ActivityServiceTest extends Specification {
     ActivityService activityService
     ActivityRepository activityRepository
 
-    void setup() {
+    def setup() {
         activityRepository = Mock()
         activityService = new ActivityService(activityRepository)
     }
