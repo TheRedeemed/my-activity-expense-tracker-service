@@ -1,19 +1,13 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto
 import com.theredeemed.myactivityexpensetrackerservice.service.ActivityService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import spock.lang.Specification
-
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 
 import static com.theredeemed.myactivityexpensetrackerservice.TestConstants.getActivityDto
 import static com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants.ACTIVITY_ENDPOINT_V1
