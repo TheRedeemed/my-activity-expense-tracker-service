@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants.ACTIVITY_ENDPOINT_V1;
+
 @RestController
-@RequestMapping("/api/v1/activities")
+@RequestMapping(ACTIVITY_ENDPOINT_V1)
 @CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class ActivityController {
