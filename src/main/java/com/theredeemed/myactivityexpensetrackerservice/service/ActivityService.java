@@ -1,5 +1,6 @@
 package com.theredeemed.myactivityexpensetrackerservice.service;
 
+import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException;
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto;
 import com.theredeemed.myactivityexpensetrackerservice.model.entity.ActivityEntity;
 import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActivityRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.theredeemed.myactivityexpensetrackerservice.converter.ActivityConverter.*;
+import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.UNABLE_TO_SAVE_ACTIVITY;
 
 @Service
 @Slf4j
@@ -27,7 +29,7 @@ public class ActivityService {
         return toActivityDtos(activityRepository.findAll());
     }
 
-    public ActivityDto createNewActivity(ActivityDto newActivityDto) {
+    public ActivityDto createNewActivity(ActivityDto newActivityDto) throws ActivityException {
         ActivityEntity newActivityEntity = toActivityEntity(newActivityDto);
         try {
             log.debug("Saving activity entity");
@@ -35,7 +37,7 @@ public class ActivityService {
             return newActivityDto;
         } catch (IllegalArgumentException | DataAccessException e) {
             log.error(e.getMessage());
+            throw new ActivityException(UNABLE_TO_SAVE_ACTIVITY, e);
         }
-        return ActivityDto.builder().build();
     }
 }

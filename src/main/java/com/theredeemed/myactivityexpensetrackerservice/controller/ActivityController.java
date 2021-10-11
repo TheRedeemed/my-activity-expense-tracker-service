@@ -1,5 +1,6 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller;
 
+import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException;
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto;
 import com.theredeemed.myactivityexpensetrackerservice.service.ActivityService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class ActivityController {
     }
 
     @PostMapping
-    public ResponseEntity<ActivityDto> createActivity(@Valid @RequestBody ActivityDto newActivity) {
+    public ResponseEntity<ActivityDto> createActivity(@Valid @RequestBody ActivityDto newActivity) throws ActivityException {
         log.debug("Calling activity service to create activity : {}", newActivity);
         ActivityDto newlyCreatedActivity = activityService.createNewActivity(newActivity);
         log.debug("Retuning newly created activity : {}", newlyCreatedActivity);
