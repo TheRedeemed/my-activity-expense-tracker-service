@@ -18,7 +18,9 @@ public class ExceptionAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleActivityException(ActivityException activityException,
                                                                   WebRequest request) {
         Map<String, Object> error = new LinkedHashMap<>();
-        error.put("Error Message", activityException.getMessage());
+        error.put("Error Code", activityException.getError().getCode());
+        error.put("Error Message", activityException.getError().getDescription());
+        error.put("Error Details", activityException.getMessage());
         error.put("Timestamp", LocalDateTime.now());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
