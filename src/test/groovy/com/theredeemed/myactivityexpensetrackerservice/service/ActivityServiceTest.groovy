@@ -2,6 +2,7 @@ package com.theredeemed.myactivityexpensetrackerservice.service
 
 import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto
+import com.theredeemed.myactivityexpensetrackerservice.model.entity.ActivityEntity
 import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActivityRepository
 import spock.lang.Specification
 
@@ -42,13 +43,15 @@ class ActivityServiceTest extends Specification {
 
     def "Sad path - Saving new activity"() {
         given: 'A request to save a new activity'
-        activityRepository.save(_) >> { throw new IllegalArgumentException('an error occurred while saving activity') }
+        activityRepository.save(_ as ActivityEntity) >> { throw new IllegalArgumentException('an error occurred while saving activity') }
 
         when: 'The createNewActivity method is called'
         activityService.createNewActivity(getActivityDto())
 
         then: 'An illegalArgumentException is thrown'
         def exception = thrown(ActivityException)
+        exception.error.code == 0
+        exception.error.description.equalsIgnoreCase('Unable to save activity')
         exception.error.toString().equalsIgnoreCase("0 - Unable to save activity")
     }
 
