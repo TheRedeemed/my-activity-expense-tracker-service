@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -12,7 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ActivityDto {
+public class ActivityDto implements Serializable {
+
+    public static final long serialVersionUID = 5960343296903472428L;
+
     @NotBlank(message = "Activity Title is required")
     String title;
 

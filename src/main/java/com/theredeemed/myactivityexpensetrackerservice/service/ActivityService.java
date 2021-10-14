@@ -1,6 +1,6 @@
 package com.theredeemed.myactivityexpensetrackerservice.service;
 
-import com.theredeemed.myactivityexpensetrackerservice.converter.ActivityConverter;
+import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException;
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto;
 import com.theredeemed.myactivityexpensetrackerservice.model.entity.ActivityEntity;
 import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActivityRepository;
@@ -11,28 +11,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.theredeemed.myactivityexpensetrackerservice.converter.ActivityConverter.*;
+import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.UNABLE_TO_SAVE_ACTIVITY;
+
 @Service
 @Slf4j
 public class ActivityService {
-//    static List<ActivityDto> activityList = new ArrayList<>(
-//            Arrays.asList(
-//                    ActivityDto.builder()
-//                            .title("Martial Arts")
-//                            .description("Martial art activity with Mark. Every Monday at 6pm")
-//                            .fee(new BigDecimal("10"))
-//                            .balance(new BigDecimal("0"))
-//                            .updatedTimestamp(LocalDateTime.of(LocalDate.of(2020, 12, 8), LocalTime.of(23, 20)))
-//                            .build(),
-//                    ActivityDto.builder()
-//                            .title("Workout")
-//                            .description("Workout with Andrew. Every Tuesday and Thursday at 7:30am")
-//                            .fee(new BigDecimal("15"))
-//                            .balance(new BigDecimal("15"))
-//                            .updatedTimestamp(LocalDateTime.of(LocalDate.of(2020, 12, 24), LocalTime.of(9, 30)))
-//                            .build()
-//            )
-//    );
-
     private final ActivityRepository activityRepository;
 
     @Autowired
@@ -42,17 +26,18 @@ public class ActivityService {
 
     public List<ActivityDto> getActivityList() {
         log.debug("Returning list of activities");
-        return ActivityConverter.toActivityDtos(activityRepository.findAll());
+        return toActivityDtos(activityRepository.findAll());
     }
 
-    public ActivityDto createNewActivity(ActivityDto newActivity) {
-        ActivityEntity activityEntity = ActivityConverter.toActivityEntity(newActivity);
-        try{
+    public ActivityDto createNewActivity(ActivityDto newActivityDto) throws ActivityException {
+        ActivityEntity newActivityEntity = toActivityEntity(newActivityDto);
+        try {
             log.debug("Saving activity entity");
-            activityRepository.save(activityEntity);
+            activityRepository.save(newActivityEntity);
+            return newActivityDto;
         } catch (IllegalArgumentException | DataAccessException e) {
             log.error(e.getMessage());
+            throw new ActivityException(UNABLE_TO_SAVE_ACTIVITY, e);
         }
-        return ActivityConverter.toActivityDto(activityEntity);
     }
 }
