@@ -8,15 +8,17 @@ import spock.lang.Specification
 
 import static com.theredeemed.myactivityexpensetrackerservice.TestConstants.getActivityDto
 import static com.theredeemed.myactivityexpensetrackerservice.TestConstants.getActivityEntityList
-import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.UNABLE_TO_SAVE_ACTIVITY
 
 class ActivityServiceTest extends Specification {
     ActivityService activityService
     ActivityRepository activityRepository
+    Map<String, String> activityExpense = new HashMap<>()
 
     def setup() {
         activityRepository = Mock()
         activityService = new ActivityService(activityRepository)
+        activityExpense.put("title","Martial Arts")
+        activityExpense.put("balance","10")
     }
 
     def "Retrieving activity list"() {
@@ -53,6 +55,33 @@ class ActivityServiceTest extends Specification {
         exception.error.code == 0
         exception.error.description.equalsIgnoreCase('Unable to save activity')
         exception.error.toString().equalsIgnoreCase("0 - Unable to save activity")
+    }
+
+    def "Happy path - updating the activity balance"() {
+        given: 'The balance of an activity needs to be updated'
+        ActivityEntity activityMock = getActivityEntityList().get(0)
+        activityMock.balance = 10
+
+        when: 'The balance is updated successfully'
+        ActivityDto updatedActivity = activityService.updateActivityBalance(activityExpense)
+
+        then: 'Expect the activity with the updated expense to be returned'
+        1 * activityRepository.updateActivityBalance(_ as String, _ as BigDecimal)
+        updatedActivity.balance == new BigDecimal(10)
+    }
+
+    def "Sad path - Error while updating the activity balance"() {
+        given: 'The balance of an activity needs to be updated'
+        activityRepository.updateActivityBalance(_ as String, _ as BigDecimal) >> { throw new IllegalArgumentException('An error occurred while updating the balance') }
+
+        when: 'An error occurs while updating the balance'
+        activityService.updateActivityBalance(activityExpense)
+
+        then: 'Expect an error to be thrown'
+        def exception = thrown(ActivityException)
+        exception.error.code == 2
+        exception.error.description.equalsIgnoreCase('Unable to update activity balance')
+        exception.error.toString().equalsIgnoreCase('2 - Unable to update activity balance')
     }
 
 }

@@ -6,6 +6,7 @@ import com.theredeemed.myactivityexpensetrackerservice.service.ActivityService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpStatus
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
@@ -15,6 +16,7 @@ import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.OK
 import static org.springframework.http.MediaType.APPLICATION_JSON
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 
@@ -70,4 +72,30 @@ class ActivityControllerTest extends Specification {
         response.status == CREATED.value()
     }
 
+    def "Update activity balance"() {
+        given: 'An expense to need to be added for an activity'
+        ActivityDto dto = ActivityDto.builder()
+                .title("Martial Arts")
+                .description("Martial art activity with Mark. Every Monday at 6pm")
+                .fee(new BigDecimal("10"))
+                .balance(new BigDecimal("10"))
+                .build()
+        activityService.createNewActivity(_ as ActivityDto) >> dto
+
+        Map<String, String> updates = new HashMap<>()
+        updates.put("title","Martial Arts")
+        updates.put("balance", "10")
+
+        when: 'The expense is added successfully'
+        def response = mockMvc.perform(
+                patch(ACTIVITY_ENDPOINT_V1)
+                        .content(objectMapper.writeValueAsString(updates))
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON))
+                .andReturn()
+                .response
+
+        then: 'Expect the activity with the added expense to be returned'
+        response.status == OK.value()
+    }
 }
