@@ -13,12 +13,14 @@ class ActivityServiceTest extends Specification {
     ActivityService activityService
     ActivityRepository activityRepository
     Map<String, String> activityExpense = new HashMap<>()
+    ActivityEntity activityMock
 
     def setup() {
         activityRepository = Mock()
         activityService = new ActivityService(activityRepository)
         activityExpense.put("title","Martial Arts")
         activityExpense.put("balance","10")
+        activityMock = getActivityEntityList().get(0)
     }
 
     def "Retrieving activity list"() {
@@ -39,7 +41,7 @@ class ActivityServiceTest extends Specification {
         ActivityDto newActivity = activityService.createNewActivity(getActivityDto())
 
         then: 'Save and return the Dto of the newly created activity'
-        1 * activityRepository.save(_)
+        1 * activityRepository.save(_ as ActivityEntity)
         newActivity.title.equalsIgnoreCase('Martial Arts')
     }
 
@@ -59,25 +61,39 @@ class ActivityServiceTest extends Specification {
 
     def "Happy path - updating the activity balance"() {
         given: 'The balance of an activity needs to be updated'
-        ActivityEntity activityMock = getActivityEntityList().get(0)
-        activityMock.balance = 10
 
         when: 'The balance is updated successfully'
         ActivityDto updatedActivity = activityService.updateActivityBalance(activityExpense)
 
         then: 'Expect the activity with the updated expense to be returned'
-        1 * activityRepository.updateActivityBalance(_ as String, _ as BigDecimal)
+        1 * activityRepository.findByTitle(_ as String) >> activityMock
+        1 * activityRepository.save(_ as ActivityEntity)
         updatedActivity.balance == new BigDecimal(10)
+    }
+
+    def "Sad path - updating the activity balance - activity to update not found"() {
+        given: 'The balance of an activity needs to be updated'
+
+        when: 'The balance is updated successfully'
+        ActivityDto updatedActivity = activityService.updateActivityBalance(activityExpense)
+
+        then: 'Expect the activity with the updated expense to be returned'
+        1 * activityRepository.findByTitle(_ as String) >> null
+        0 * activityRepository.save(_ as ActivityEntity)
+        def exception = thrown(ActivityException)
+        exception.error.code == 1
+        exception.error.description.equalsIgnoreCase("Activity Not Found")
     }
 
     def "Sad path - Error while updating the activity balance"() {
         given: 'The balance of an activity needs to be updated'
-        activityRepository.updateActivityBalance(_ as String, _ as BigDecimal) >> { throw new IllegalArgumentException('An error occurred while updating the balance') }
+        activityRepository.save(_ as ActivityEntity) >> { throw new IllegalArgumentException('An error occurred while updating the balance') }
 
         when: 'An error occurs while updating the balance'
         activityService.updateActivityBalance(activityExpense)
 
         then: 'Expect an error to be thrown'
+        1 * activityRepository.findByTitle(_ as String) >> activityMock
         def exception = thrown(ActivityException)
         exception.error.code == 2
         exception.error.description.equalsIgnoreCase('Unable to update activity balance')

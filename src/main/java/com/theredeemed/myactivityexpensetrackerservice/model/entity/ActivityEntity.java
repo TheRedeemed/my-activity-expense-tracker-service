@@ -44,4 +44,10 @@ public class ActivityEntity implements Serializable {
     @Column(name = "UPDATED_TIMESTAMP", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedTimestamp;
+
+    @Column(name = "DETAILS")
+    private String details;
+
+    @Column(name = "CREATED_BY")
+    private String createdBy;
 }

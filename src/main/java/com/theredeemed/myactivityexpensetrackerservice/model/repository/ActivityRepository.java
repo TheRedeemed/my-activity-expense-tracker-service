@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<ActivityEntity, Long> {
@@ -16,4 +17,7 @@ public interface ActivityRepository extends JpaRepository<ActivityEntity, Long> 
     @Modifying
     @Query(value = "update ActivityEntity a set a.balance = :balance where a.title = :title")
     void updateActivityBalance(@Param("title") String title, @Param("balance") BigDecimal balance);
+
+    //TODO - Return optional
+    ActivityEntity findByTitle(String title);
 }
