@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 import static com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants.ACTIVITY_ENDPOINT_V1;
 
@@ -42,4 +43,13 @@ public class ActivityController {
         log.debug("Retuning newly created activity : {}", newlyCreatedActivity);
         return new ResponseEntity<>(newlyCreatedActivity, HttpStatus.CREATED);
     }
+
+    @PatchMapping
+    public ResponseEntity<ActivityDto> updateActivityBalance(@RequestBody Map<String, String> activityExpense) throws ActivityException {
+        log.debug("Calling activity service to add activity expense : {}", activityExpense);
+        ActivityDto updatedActivity = activityService.updateActivityBalance(activityExpense);
+        log.debug("Returning updated activity : {}", updatedActivity);
+        return new ResponseEntity<>(updatedActivity, HttpStatus.OK);
+    }
+
 }

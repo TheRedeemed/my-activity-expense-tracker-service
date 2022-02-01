@@ -1,5 +1,7 @@
 package com.theredeemed.myactivityexpensetrackerservice.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -13,23 +15,25 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ActivityDto implements Serializable {
 
     public static final long serialVersionUID = 5960343296903472428L;
 
     @NotBlank(message = "Activity Title is required")
-    String title;
+    private String title;
 
     @NotBlank(message = "Activity Description is required")
-    String description;
+    private String description;
 
     @NotNull(message = "Activity Fee is required")
-    BigDecimal fee;
+    private BigDecimal fee;
 
     @NotNull(message = "Activity Balance is required")
-    BigDecimal balance;
+    private BigDecimal balance;
 
-    LocalDateTime createdTimestamp;
+    private LocalDateTime createdTimestamp;
 
-    LocalDateTime updatedTimestamp;
+    private LocalDateTime updatedTimestamp;
 }

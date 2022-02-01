@@ -1,9 +1,6 @@
 package com.theredeemed.myactivityexpensetrackerservice.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "ACTIVITY")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,25 +23,31 @@ public class ActivityEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false, updatable = false, unique = true)
-    Long id;
+    private Long id;
 
-    @Column(name = "TITLE", nullable = false)
-    String title;
+    @Column(name = "TITLE", nullable = false, unique = true)
+    private String title;
 
     @Column(name = "DESCRIPTION", nullable = false)
-    String description;
+    private String description;
 
     @Column(name = "FEE", nullable = false)
-    BigDecimal fee;
+    private BigDecimal fee;
 
     @Column(name = "BALANCE", nullable = false)
-    BigDecimal balance;
+    private BigDecimal balance;
 
     @Column(name = "CREATED_TIMESTAMP", nullable = false)
     @CreationTimestamp
-    LocalDateTime createdTimestamp;
+    private LocalDateTime createdTimestamp;
 
     @Column(name = "UPDATED_TIMESTAMP", nullable = false)
     @UpdateTimestamp
-    LocalDateTime updatedTimestamp;
+    private LocalDateTime updatedTimestamp;
+
+    @Column(name = "DETAILS")
+    private String details;
+
+    @Column(name = "CREATED_BY")
+    private String createdBy;
 }
