@@ -1,7 +1,7 @@
 package com.theredeemed.myactivityexpensetrackerservice.spockpractice
 
-import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto
-import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActivityRepository
+import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDTO
+
 import com.theredeemed.myactivityexpensetrackerservice.service.ActivityService
 import spock.lang.Specification
 
