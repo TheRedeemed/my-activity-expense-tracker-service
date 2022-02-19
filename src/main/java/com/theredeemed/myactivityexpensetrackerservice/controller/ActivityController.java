@@ -1,7 +1,7 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller;
 
 import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException;
-import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto;
+import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDTO;
 import com.theredeemed.myactivityexpensetrackerservice.service.ActivityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -29,25 +28,25 @@ public class ActivityController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ActivityDto>> retrieveActivityList() {
+    public ResponseEntity<List<ActivityDTO>> retrieveActivityList() {
         log.debug("Calling activity service to retrieve Activity List");
-        List<ActivityDto> activityList = activityService.getActivityList();
+        List<ActivityDTO> activityList = activityService.getActivityList();
         log.debug("Returning activity list from activity service : {}", activityList);
         return new ResponseEntity<>(activityList, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ActivityDto> createActivity(@Valid @RequestBody ActivityDto newActivity) throws ActivityException {
+    public ResponseEntity<ActivityDTO> createActivity(@RequestBody ActivityDTO newActivity) throws ActivityException {
         log.debug("Calling activity service to create activity : {}", newActivity);
-        ActivityDto newlyCreatedActivity = activityService.createNewActivity(newActivity);
+        ActivityDTO newlyCreatedActivity = activityService.createNewActivity(newActivity);
         log.debug("Retuning newly created activity : {}", newlyCreatedActivity);
         return new ResponseEntity<>(newlyCreatedActivity, HttpStatus.CREATED);
     }
 
     @PatchMapping
-    public ResponseEntity<ActivityDto> updateActivityBalance(@RequestBody Map<String, String> activityExpense) throws ActivityException {
+    public ResponseEntity<ActivityDTO> updateActivityBalance(@RequestBody Map<String, String> activityExpense) throws ActivityException {
         log.debug("Calling activity service to add activity expense : {}", activityExpense);
-        ActivityDto updatedActivity = activityService.updateActivityBalance(activityExpense);
+        ActivityDTO updatedActivity = activityService.updateActivityBalance(activityExpense);
         log.debug("Returning updated activity : {}", updatedActivity);
         return new ResponseEntity<>(updatedActivity, HttpStatus.OK);
     }

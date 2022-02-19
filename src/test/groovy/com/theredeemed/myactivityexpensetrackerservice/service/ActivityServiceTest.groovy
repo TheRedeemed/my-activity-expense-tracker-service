@@ -1,9 +1,9 @@
 package com.theredeemed.myactivityexpensetrackerservice.service
 
 import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException
-import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto
+import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDTO
 import com.theredeemed.myactivityexpensetrackerservice.model.entity.ActivityEntity
-import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActivityRepository
+
 import spock.lang.Specification
 
 import static com.theredeemed.myactivityexpensetrackerservice.TestConstants.getActivityDto
@@ -27,7 +27,7 @@ class ActivityServiceTest extends Specification {
         given: 'A request to retrieve all activities'
 
         when: 'The getActivityList method id called'
-        List<ActivityDto> activities = activityService.getActivityList()
+        List<ActivityDTO> activities = activityService.getActivityList()
 
         then: 'expect the activity list to be returned'
         1 * activityRepository.findAll() >> getActivityEntityList()
@@ -38,7 +38,7 @@ class ActivityServiceTest extends Specification {
         given: 'A request to save a new activity'
 
         when: 'The createNewActivity method is called'
-        ActivityDto newActivity = activityService.createNewActivity(getActivityDto())
+        ActivityDTO newActivity = activityService.createNewActivity(getActivityDto())
 
         then: 'Save and return the Dto of the newly created activity'
         1 * activityRepository.save(_ as ActivityEntity)
@@ -63,7 +63,7 @@ class ActivityServiceTest extends Specification {
         given: 'The balance of an activity needs to be updated'
 
         when: 'The balance is updated successfully'
-        ActivityDto updatedActivity = activityService.updateActivityBalance(activityExpense)
+        ActivityDTO updatedActivity = activityService.updateActivityBalance(activityExpense)
 
         then: 'Expect the activity with the updated expense to be returned'
         1 * activityRepository.findByTitle(_ as String) >> activityMock
@@ -75,7 +75,7 @@ class ActivityServiceTest extends Specification {
         given: 'The balance of an activity needs to be updated'
 
         when: 'The balance is updated successfully'
-        ActivityDto updatedActivity = activityService.updateActivityBalance(activityExpense)
+        ActivityDTO updatedActivity = activityService.updateActivityBalance(activityExpense)
 
         then: 'Expect the activity with the updated expense to be returned'
         1 * activityRepository.findByTitle(_ as String) >> null

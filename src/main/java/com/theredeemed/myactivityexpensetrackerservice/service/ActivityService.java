@@ -1,44 +1,40 @@
 package com.theredeemed.myactivityexpensetrackerservice.service;
 
 import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException;
-import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto;
-import com.theredeemed.myactivityexpensetrackerservice.model.entity.ActivityEntity;
-import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActivityRepository;
+import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDTO;
+import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActivityJdbcDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import static com.theredeemed.myactivityexpensetrackerservice.converter.ActivityConverter.*;
-import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.*;
+import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.UNABLE_TO_SAVE_ACTIVITY;
+import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.UNABLE_TO_UPDATE_ACTIVITY_BALANCE;
 
 @Service
 @Slf4j
 public class ActivityService {
-    private final ActivityRepository activityRepository;
+    private final ActivityJdbcDAO activityJdbcDAO;
 
     @Autowired
-    ActivityService(ActivityRepository activityRepository) {
-        this.activityRepository = activityRepository;
+    ActivityService(ActivityJdbcDAO activityJdbcDAO) {
+        this.activityJdbcDAO = activityJdbcDAO;
     }
 
-    public List<ActivityDto> getActivityList() {
+    public List<ActivityDTO> getActivityList() {
         log.debug("Returning list of activities");
-        return toActivityDtos(activityRepository.findAll());
+        return activityJdbcDAO.findAll();
     }
 
-    public ActivityDto createNewActivity(ActivityDto newActivityDto) throws ActivityException {
-        ActivityEntity newActivityEntity = toActivityEntity(newActivityDto);
+    public ActivityDTO createNewActivity(ActivityDTO newActivityDTO) throws ActivityException {
         try {
             log.debug("Saving activity entity");
-            activityRepository.save(newActivityEntity);
-            return newActivityDto;
+            activityJdbcDAO.create(newActivityDTO);
+            return newActivityDTO;
         } catch (IllegalArgumentException | DataAccessException e) {
             log.error(e.getMessage());
             throw new ActivityException(UNABLE_TO_SAVE_ACTIVITY, e);
@@ -46,16 +42,16 @@ public class ActivityService {
     }
 
     @Transactional  //A Transaction is required when perform a Db update operation
-    public ActivityDto updateActivityBalance(Map<String, String> activityExpense) throws ActivityException {
-        try{
-            ActivityEntity activityToUpdate = activityRepository.findByTitle(activityExpense.get("title"));
-            if (Optional.ofNullable(activityToUpdate).isPresent()) {
-                activityToUpdate.setBalance(new BigDecimal(activityExpense.get("balance")));
-                activityRepository.save(activityToUpdate);
-            } else {
-                throw new ActivityException(ACTIVITY_NOT_FOUND);
-            }
-            return toActivityDto(activityToUpdate);
+    public ActivityDTO updateActivityBalance(Map<String, String> activityExpense) throws ActivityException {
+        try {
+//            ActivityEntity activityToUpdate = activityJdbcDAO.findByTitle(activityExpense.get("title"));
+//            if (Optional.ofNullable(activityToUpdate).isPresent()) {
+//                activityToUpdate.setBalance(new BigDecimal(activityExpense.get("balance")));
+//                activityRepository.save(activityToUpdate);
+//            } else {
+//                throw new ActivityException(ACTIVITY_NOT_FOUND);
+//            }
+            return ActivityDTO.builder().build();
         } catch (IllegalArgumentException | DataAccessException e) {
             log.error(e.getMessage());
             throw new ActivityException(UNABLE_TO_UPDATE_ACTIVITY_BALANCE, e);

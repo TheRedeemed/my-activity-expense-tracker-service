@@ -28,7 +28,7 @@ public class UserDTO implements Serializable {
     private String password;
     private Date createdDate;
     private Date updatedDate;
-    private RoleDTO roleDTO;
+    private String roleName;
 
     @Override
     public boolean equals(Object o) {
@@ -42,11 +42,12 @@ public class UserDTO implements Serializable {
                 username.equals(that.username) &&
                 password.equals(that.password) &&
                 createdDate.equals(that.createdDate) &&
-                updatedDate.equals(that.updatedDate);
+                updatedDate.equals(that.updatedDate) &&
+                roleName.equals(that.roleName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, username, password, createdDate, updatedDate);
+        return Objects.hash(id, firstName, lastName, email, username, password, createdDate, updatedDate, roleName);
     }
 }

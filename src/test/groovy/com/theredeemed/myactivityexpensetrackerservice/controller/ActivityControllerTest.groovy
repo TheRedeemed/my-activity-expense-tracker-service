@@ -1,7 +1,7 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDto
+import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDTO
 import com.theredeemed.myactivityexpensetrackerservice.service.ActivityService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -51,13 +51,13 @@ class ActivityControllerTest extends Specification {
 
     def "Create a new activity"() {
         given: 'A new activity needs to be created'
-        ActivityDto dto = ActivityDto.builder()
+        ActivityDTO dto = ActivityDTO.builder()
                 .title("Martial Arts")
                 .description("Martial art activity with Mark. Every Monday at 6pm")
                 .fee(new BigDecimal("10"))
                 .balance(new BigDecimal("0"))
                 .build()
-        activityService.createNewActivity(_ as ActivityDto) >> dto
+        activityService.createNewActivity(_ as ActivityDTO) >> dto
 
         when: 'The createActivity method is called'
         def response = mockMvc.perform(
@@ -74,13 +74,13 @@ class ActivityControllerTest extends Specification {
 
     def "Update activity balance"() {
         given: 'An expense to need to be added for an activity'
-        ActivityDto dto = ActivityDto.builder()
+        ActivityDTO dto = ActivityDTO.builder()
                 .title("Martial Arts")
                 .description("Martial art activity with Mark. Every Monday at 6pm")
                 .fee(new BigDecimal("10"))
                 .balance(new BigDecimal("10"))
                 .build()
-        activityService.createNewActivity(_ as ActivityDto) >> dto
+        activityService.createNewActivity(_ as ActivityDTO) >> dto
 
         Map<String, String> updates = new HashMap<>()
         updates.put("title","Martial Arts")
