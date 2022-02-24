@@ -1,9 +1,12 @@
 package com.theredeemed.myactivityexpensetrackerservice.exception;
 
 public enum Error {
-    UNABLE_TO_SAVE_ACTIVITY(0, "Unable to save activity"),
-    ACTIVITY_NOT_FOUND(1, "Activity Not Found"),
-    UNABLE_TO_UPDATE_ACTIVITY_BALANCE(2, "Unable to update activity balance");
+    UNABLE_TO_SAVE_RECORD(0, "Unable to save record"),
+    RECORD_NOT_FOUND(1, "Record Not Found"),
+    UNABLE_TO_UPDATE_RECORD(2, "Record Not Found"),
+    UNABLE_TO_UPDATE_ACTIVITY_BALANCE(3, "Unable to update activity balance"),
+    INVALID_REQUEST_PAYLOAD(4, "Invalid Request Payload");
+
 
     private final int code;
     private final String description;
