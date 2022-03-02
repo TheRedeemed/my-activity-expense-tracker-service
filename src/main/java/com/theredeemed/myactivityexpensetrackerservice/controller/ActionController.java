@@ -1,7 +1,5 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException;
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActionDTO;
 import com.theredeemed.myactivityexpensetrackerservice.service.ActionService;
