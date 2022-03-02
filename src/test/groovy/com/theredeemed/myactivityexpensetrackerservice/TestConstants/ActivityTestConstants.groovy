@@ -1,14 +1,13 @@
-package com.theredeemed.myactivityexpensetrackerservice
+package com.theredeemed.myactivityexpensetrackerservice.TestConstants
 
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDTO
-import com.theredeemed.myactivityexpensetrackerservice.model.entity.ActivityEntity
 
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-class TestConstants {
-    static List<ActivityEntity> getActivityEntityList() {
+class ActivityTestConstants {
+    static List<ActivityDTO> getActivityEntityList() {
         [
 //                ActivityEntity.builder()
 //                        .id(1L)

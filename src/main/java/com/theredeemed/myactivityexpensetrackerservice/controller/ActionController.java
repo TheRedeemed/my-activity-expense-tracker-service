@@ -1,10 +1,13 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException;
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActionDTO;
 import com.theredeemed.myactivityexpensetrackerservice.service.ActionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +17,7 @@ import java.util.Map;
 import static com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants.ACTION_ENDPOINT_V1;
 
 @RestController
-@RequestMapping(ACTION_ENDPOINT_V1)
+@RequestMapping(value = ACTION_ENDPOINT_V1, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class ActionController {
     private final ActionService actionService;
