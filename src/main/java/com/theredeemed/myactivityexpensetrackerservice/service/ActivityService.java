@@ -12,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.UNABLE_TO_SAVE_ACTIVITY;
-import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.UNABLE_TO_UPDATE_ACTIVITY_BALANCE;
+import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.*;
 
 @Service
 @Slf4j
@@ -37,7 +36,7 @@ public class ActivityService {
             return newActivityDTO;
         } catch (IllegalArgumentException | DataAccessException e) {
             log.error(e.getMessage());
-            throw new ActivityException(UNABLE_TO_SAVE_ACTIVITY, e);
+            throw new ActivityException(UNABLE_TO_SAVE_RECORD, e);
         }
     }
 
@@ -54,7 +53,7 @@ public class ActivityService {
             return ActivityDTO.builder().build();
         } catch (IllegalArgumentException | DataAccessException e) {
             log.error(e.getMessage());
-            throw new ActivityException(UNABLE_TO_UPDATE_ACTIVITY_BALANCE, e);
+            throw new ActivityException(UNABLE_TO_UPDATE_RECORD, e);
         }
     }
 }

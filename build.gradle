@@ -26,6 +26,7 @@ dependencies {
 	compile 'mysql:mysql-connector-java:8.0.25'
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
 	// adding dependencies for spock

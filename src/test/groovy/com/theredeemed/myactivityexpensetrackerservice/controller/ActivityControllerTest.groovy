@@ -1,26 +1,23 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.theredeemed.myactivityexpensetrackerservice.controller.ActivityController
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActivityDTO
 import com.theredeemed.myactivityexpensetrackerservice.service.ActivityService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.HttpStatus
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
-import static com.theredeemed.myactivityexpensetrackerservice.TestConstants.getActivityDto
 import static com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants.ACTIVITY_ENDPOINT_V1
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.OK
 import static org.springframework.http.MediaType.APPLICATION_JSON
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 
-@SpringBootTest
+@SpringBootTest(classes = ActivityController.class)
 @AutoConfigureMockMvc
 class ActivityControllerTest extends Specification {
 
@@ -83,7 +80,7 @@ class ActivityControllerTest extends Specification {
         activityService.createNewActivity(_ as ActivityDTO) >> dto
 
         Map<String, String> updates = new HashMap<>()
-        updates.put("title","Martial Arts")
+        updates.put("title", "Martial Arts")
         updates.put("balance", "10")
 
         when: 'The expense is added successfully'
