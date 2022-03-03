@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -21,12 +21,12 @@ public class RoleDTO implements Serializable {
     public static final long serialVersionUID = 635336854742360713L;
 
     private Long id;
-    private String roleName;
+    private Roles roleName;
     private String description;
     private String createdBy;
-    private Date createdDate;
+    private LocalDate createdDate;
     private String updatedBy;
-    private Date updatedDate;
+    private LocalDate updatedDate;
 
     @Override
     public boolean equals(Object o) {

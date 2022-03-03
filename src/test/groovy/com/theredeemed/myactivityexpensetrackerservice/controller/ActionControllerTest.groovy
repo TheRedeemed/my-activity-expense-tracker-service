@@ -1,7 +1,6 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.theredeemed.myactivityexpensetrackerservice.controller.ActionController
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActionDTO
 import com.theredeemed.myactivityexpensetrackerservice.service.ActionService
 import org.spockframework.spring.SpringBean
@@ -72,7 +71,7 @@ class ActionControllerTest extends Specification {
     def "Create a new action"() {
         given: 'A new action needs to be created'
         ActionDTO dto = getNewActionReqPayload()
-        actionService.addNewAction(_ as ActionDTO) >> dto
+        actionService.createNewAction(_ as ActionDTO) >> dto
 
         when: 'The create endpoint is called'
         def response = mockMvc.perform(
@@ -89,7 +88,7 @@ class ActionControllerTest extends Specification {
 
     def "Update an action description"() {
         given: 'A request to updated the description on an action'
-        setUploadRequestPayloadValues(updateReqPayload)
+        setActionsUploadRequestPayloadValues(updateReqPayload)
         ActionDTO dto = getActionDTOMock()
         actionService.updateAction(_ as Map<String, String>) >> dto
 

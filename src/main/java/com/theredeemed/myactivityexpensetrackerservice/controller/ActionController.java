@@ -27,7 +27,7 @@ public class ActionController {
     @PostMapping
     public ResponseEntity<ActionDTO> addNewAction(@RequestBody ActionDTO actionDTO) throws ActivityException {
         log.debug("Calling action service to create action : {}", actionDTO);
-        ActionDTO newAction = actionService.addNewAction(actionDTO);
+        ActionDTO newAction = actionService.createNewAction(actionDTO);
         log.debug("returning newly created action {}", newAction);
         return new ResponseEntity<>(newAction, HttpStatus.CREATED);
     }

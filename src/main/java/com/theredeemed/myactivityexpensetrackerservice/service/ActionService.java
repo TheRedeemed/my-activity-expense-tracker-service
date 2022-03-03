@@ -24,15 +24,15 @@ public class ActionService {
         this.actionJdbcDAO = actionJdbcDAO;
     }
 
-    public ActionDTO addNewAction(ActionDTO actionDTO) throws ActivityException {
-        log.debug("Saving action {}", actionDTO);
+    public ActionDTO createNewAction(ActionDTO actionDTO) throws ActivityException {
         actionDTO.setCreatedDate(LocalDate.now());
         actionDTO.setUpdatedDate(LocalDate.now());
         try {
+            log.debug("Creating new action {}", actionDTO);
             actionJdbcDAO.create(actionDTO);
             return actionDTO;
         } catch (IllegalArgumentException | DataAccessException e) {
-            log.error(e.getMessage());
+            log.error("Error while saving new action - {}",e.getMessage());
             throw new ActivityException(UNABLE_TO_SAVE_RECORD);
         }
     }
@@ -43,7 +43,7 @@ public class ActionService {
     }
 
     public ActionDTO getActionById(Long id) throws ActivityException {
-        log.debug("Getting actions with id : {}", id);
+        log.debug("Getting action with id : {}", id);
         Optional<ActionDTO> actionDTO = actionJdbcDAO.findById(id);
         actionDTO.orElseThrow(() -> new ActivityException(RECORD_NOT_FOUND));
         return actionDTO.get();
