@@ -15,8 +15,8 @@ import java.util.Map;
 import static com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants.ACTION_ENDPOINT_V1;
 
 @RestController
-@RequestMapping(value = ACTION_ENDPOINT_V1, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
+@RequestMapping(value = ACTION_ENDPOINT_V1, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ActionController {
     private final ActionService actionService;
 
@@ -27,7 +27,7 @@ public class ActionController {
     @PostMapping
     public ResponseEntity<ActionDTO> addNewAction(@RequestBody ActionDTO actionDTO) throws ActivityException {
         log.debug("Calling action service to create action : {}", actionDTO);
-        ActionDTO newAction = actionService.addNewAction(actionDTO);
+        ActionDTO newAction = actionService.createNewAction(actionDTO);
         log.debug("returning newly created action {}", newAction);
         return new ResponseEntity<>(newAction, HttpStatus.CREATED);
     }

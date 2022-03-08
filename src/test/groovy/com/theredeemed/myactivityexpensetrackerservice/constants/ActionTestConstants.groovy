@@ -20,7 +20,7 @@ class ActionTestConstants {
                 .build()
     }
 
-    static void setUploadRequestPayloadValues(Map<String, String> updateReqPayload) {
+    static void setActionsUploadRequestPayloadValues(Map<String, String> updateReqPayload) {
         updateReqPayload.put("id", "1")
         updateReqPayload.put("description", "some description")
     }

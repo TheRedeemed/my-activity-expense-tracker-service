@@ -3,7 +3,6 @@ package com.theredeemed.myactivityexpensetrackerservice.service
 import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActionDTO
 import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActionJdbcDAO
-import com.theredeemed.myactivityexpensetrackerservice.service.ActionService
 import spock.lang.Specification
 
 import static com.theredeemed.myactivityexpensetrackerservice.constants.ActionTestConstants.*
@@ -23,7 +22,7 @@ class ActionServiceTest extends Specification {
         given: 'A Request to create a new transaction action'
 
         when: 'The addNewAction method is called with the correct payload'
-        ActionDTO newAction = actionService.addNewAction(getNewActionReqPayload())
+        ActionDTO newAction = actionService.createNewAction(getNewActionReqPayload())
 
         then: 'Return the created action'
         1 * actionJdbcDAO.create(_)
@@ -34,7 +33,7 @@ class ActionServiceTest extends Specification {
         given: 'A Request to create a new transaction action'
 
         when: 'The addNewAction method is called'
-        actionService.addNewAction(getNewActionReqPayload())
+        actionService.createNewAction(getNewActionReqPayload())
 
         then: 'An exception is thrown'
         1 * actionJdbcDAO.create(_ as ActionDTO) >> { throw new IllegalArgumentException() }
@@ -82,7 +81,7 @@ class ActionServiceTest extends Specification {
 
     def "Update Action"() {
         given: 'A Request to update an action'
-        setUploadRequestPayloadValues(updateReqPayload)
+        setActionsUploadRequestPayloadValues(updateReqPayload)
 
         when: 'The updateAction method is called with an updateRequestPayload'
         ActionDTO dto = actionService.updateAction(updateReqPayload)
@@ -100,7 +99,7 @@ class ActionServiceTest extends Specification {
         when: 'The updateAction method is called with an updateRequestPayload'
         actionService.updateAction(updateReqPayload)
 
-        then: 'Return a list of all actions'
+        then: 'An Exception is returned'
         def exception = thrown(ActivityException)
         exception.error.code == 4
         exception.error.description.equalsIgnoreCase("Invalid Request Payload")
@@ -113,7 +112,7 @@ class ActionServiceTest extends Specification {
         when: 'The updateAction method is called with an updateRequestPayload'
         actionService.updateAction(updateReqPayload)
 
-        then: 'Return a list of all actions'
+        then: 'An Exception is returned'
         def exception = thrown(ActivityException)
         exception.error.code == 4
         exception.error.description.equalsIgnoreCase("Invalid Request Payload")
@@ -121,12 +120,12 @@ class ActionServiceTest extends Specification {
 
     def "Update Action - Exception while updating the record"() {
         given: 'A Request to update an action'
-        setUploadRequestPayloadValues(updateReqPayload)
+        setActionsUploadRequestPayloadValues(updateReqPayload)
 
         when: 'The updateAction method is called with an updateRequestPayload'
         actionService.updateAction(updateReqPayload)
 
-        then: 'Return a list of all actions'
+        then: 'An Exception is returned'
         1 * actionJdbcDAO.findById(_ as Long) >> Optional.of(getActionDTOMock())
         1 * actionJdbcDAO.update(_ as ActionDTO, _ as Long) >> { throw new IllegalArgumentException() }
         def exception = thrown(ActivityException)

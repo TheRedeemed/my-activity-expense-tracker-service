@@ -1,8 +1,8 @@
 package com.theredeemed.myactivityexpensetrackerservice.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActionDTO
-import com.theredeemed.myactivityexpensetrackerservice.service.ActionService
+import com.theredeemed.myactivityexpensetrackerservice.model.dto.RoleDTO
+import com.theredeemed.myactivityexpensetrackerservice.service.RoleService
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -15,19 +15,19 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import spock.lang.Specification
 
-import static com.theredeemed.myactivityexpensetrackerservice.constants.ActionTestConstants.*
-import static com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants.ACTION_ENDPOINT_V1
+import static com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants.ROLE_ENDPOINT_V1
+import static com.theredeemed.myactivityexpensetrackerservice.constants.RoleTestConstants.*
 
+@WebMvcTest(RoleController)
 @AutoConfigureMockMvc
-@WebMvcTest(ActionController)
 @ActiveProfiles("test")
-class ActionControllerTest extends Specification {
+class RoleControllerTest extends Specification {
 
     @Autowired
     MockMvc mockMvc
 
     @SpringBean
-    ActionService actionService = Mock()
+    RoleService roleService = Mock()
 
     ObjectMapper objectMapper
     Map<String, String> updateReqPayload
@@ -37,46 +37,14 @@ class ActionControllerTest extends Specification {
         updateReqPayload = new HashMap<>()
     }
 
-    def "Retrieve the list of all actions"() {
-        given: 'The list of all actions is requested'
-        actionService.getAllActionList() >> getActionListMock()
-
-        when: 'The getAllActions method is called'
-        def response = mockMvc.perform(
-                MockMvcRequestBuilders.get(ACTION_ENDPOINT_V1).accept(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn()
-                .response
-
-        then: 'Expect the response to be successful'
-        response.status == HttpStatus.OK.value()
-    }
-
-    def "Retrieve an action by ID"() {
-        given: 'An action is requested'
-        actionService.getActionById(_ as Long) >> getActionDTOMock()
-
-        when: 'The getActionId endpoint is called'
-        def response = mockMvc.perform(
-                MockMvcRequestBuilders.get(ACTION_ENDPOINT_V1 + "/{id}", "1")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn()
-                .response
-
-        then: 'Expect the response to be successful'
-        response.status == HttpStatus.OK.value()
-    }
-
-    def "Create a new action"() {
-        given: 'A new action needs to be created'
-        ActionDTO dto = getNewActionReqPayload()
-        actionService.createNewAction(_ as ActionDTO) >> dto
+    def "Create a new Role"() {
+        given: 'A new role need to be created'
+        roleService.createNewRole(_ as RoleDTO) >> getRoleMockObj()
 
         when: 'The create endpoint is called'
         def response = mockMvc.perform(
-                MockMvcRequestBuilders.post(ACTION_ENDPOINT_V1)
-                        .content(objectMapper.writeValueAsString(dto))
+                MockMvcRequestBuilders.post(ROLE_ENDPOINT_V1)
+                        .content(objectMapper.writeValueAsString(getNewRoleRequest()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn()
@@ -86,15 +54,47 @@ class ActionControllerTest extends Specification {
         response.status == HttpStatus.CREATED.value()
     }
 
-    def "Update an action description"() {
+    def "Retrieve all roles"() {
+        given: 'The list of roles is requested'
+        roleService.findAllRoles() >> getListOfRoles()
+
+        when: 'The getAllRoles endpoint is called'
+        def response = mockMvc.perform(
+                MockMvcRequestBuilders.get(ROLE_ENDPOINT_V1)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn()
+                .response
+
+        then: 'Expect the response to be successful'
+        response.status == HttpStatus.OK.value()
+    }
+
+    def "Retrieve a Role by ID"() {
+        given: 'A Role is requested'
+        roleService.findRoleById(_ as Long) >> getRoleMockObj()
+
+        when: 'The getRoleById endpoint is called'
+        def response = mockMvc.perform(
+                MockMvcRequestBuilders.get(ROLE_ENDPOINT_V1 + "/{id}", "1")
+                        .accept(MediaType.APPLICATION_JSON)).
+                andDo(MockMvcResultHandlers.print())
+                .andReturn()
+                .response
+
+        then: 'Except the response to be successful'
+        response.status == HttpStatus.OK.value()
+    }
+
+    def "Update an role description"() {
         given: 'A request to updated the description on an action'
-        setActionsUploadRequestPayloadValues(updateReqPayload)
-        ActionDTO dto = getActionDTOMock()
-        actionService.updateAction(_ as Map<String, String>) >> dto
+        setRoleUploadRequestPayloadValues(updateReqPayload)
+        RoleDTO dto = getRoleMockObj()
+        roleService.updateRole(_ as Map<String, String>) >> dto
 
         when: 'The update endpoint is called'
         def response = mockMvc.perform(
-                MockMvcRequestBuilders.patch(ACTION_ENDPOINT_V1)
+                MockMvcRequestBuilders.patch(ROLE_ENDPOINT_V1)
                         .content(objectMapper.writeValueAsString(updateReqPayload))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -104,4 +104,5 @@ class ActionControllerTest extends Specification {
         then: 'Expect the response to be successful'
         response.status == HttpStatus.OK.value()
     }
+
 }
