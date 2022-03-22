@@ -1,10 +1,10 @@
 package com.theredeemed.myactivityexpensetrackerservice.service;
 
 import com.theredeemed.myactivityexpensetrackerservice.exception.ActivityException;
+import com.theredeemed.myactivityexpensetrackerservice.exception.Error;
 import com.theredeemed.myactivityexpensetrackerservice.model.dto.ActionDTO;
 import com.theredeemed.myactivityexpensetrackerservice.model.repository.ActionJdbcDAO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.*;
+import static com.theredeemed.myactivityexpensetrackerservice.constants.AppConstants.ACTION;
+import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.RECORD_NOT_FOUND;
+import static com.theredeemed.myactivityexpensetrackerservice.exception.Error.UNABLE_TO_UPDATE_RECORD;
+import static com.theredeemed.myactivityexpensetrackerservice.util.Validator.validateUpdateRequestPayload;
 
 @Service
 @Slf4j
@@ -32,8 +35,9 @@ public class ActionService {
             actionJdbcDAO.create(actionDTO);
             return actionDTO;
         } catch (IllegalArgumentException | DataAccessException e) {
-            log.error("Error while saving new action - {}",e.getMessage());
-            throw new ActivityException(UNABLE_TO_SAVE_RECORD);
+            String errorDescription = "An error occurred while saving new role";
+            log.error(errorDescription + ": {}", e.getMessage());
+            throw new ActivityException(Error.UNABLE_TO_SAVE_RECORD, errorDescription, e);
         }
     }
 
@@ -45,12 +49,12 @@ public class ActionService {
     public ActionDTO getActionById(Long id) throws ActivityException {
         log.debug("Getting action with id : {}", id);
         Optional<ActionDTO> actionDTO = actionJdbcDAO.findById(id);
-        actionDTO.orElseThrow(() -> new ActivityException(RECORD_NOT_FOUND));
+        actionDTO.orElseThrow(() -> new ActivityException(RECORD_NOT_FOUND, "Action with ID " + id + " was not found"));
         return actionDTO.get();
     }
 
     public ActionDTO updateAction(Map<String, String> updateRequestPayload) throws ActivityException {
-        validateUpdateRequestPayload(updateRequestPayload);
+        validateUpdateRequestPayload(updateRequestPayload, ACTION);
         Long actionId = Long.parseLong(updateRequestPayload.get("id"));
         ActionDTO dto = getActionById(actionId);
         dto.setDescription(updateRequestPayload.get("description"));
@@ -61,15 +65,9 @@ public class ActionService {
             actionJdbcDAO.update(dto, actionId);
             return dto;
         } catch (IllegalArgumentException | DataAccessException e) {
-            log.error(e.getMessage());
-            throw new ActivityException(UNABLE_TO_UPDATE_RECORD);
+            String errorDescription = "An error occurred while updating a role";
+            log.error(errorDescription + ": {}", e.getMessage());
+            throw new ActivityException(UNABLE_TO_UPDATE_RECORD, errorDescription, e);
         }
-    }
-
-    private void validateUpdateRequestPayload(Map<String, String> updateRequestPayload) throws ActivityException {
-        if(StringUtils.isBlank(updateRequestPayload.get("id")) ||
-                StringUtils.isBlank(updateRequestPayload.get("description")))
-                throw new ActivityException(INVALID_REQUEST_PAYLOAD);
-
     }
 }

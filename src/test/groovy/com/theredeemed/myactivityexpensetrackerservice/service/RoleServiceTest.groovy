@@ -42,8 +42,9 @@ class RoleServiceTest extends Specification {
         then: 'Except an exception to be thrown'
         1 * roleJdbcDAO.create(_ as RoleDTO) >> { throw new IllegalArgumentException() }
         def exception = thrown(ActivityException)
-        exception.error.code == 0
-        exception.error.description.equalsIgnoreCase("Unable to save record")
+        exception.error.code == 1000
+        exception.error.title.equalsIgnoreCase("Unable to save record")
+        exception.errorDescription.equalsIgnoreCase("An error occurred while saving new role")
     }
 
     def 'Get list of all roles'() {
@@ -78,8 +79,9 @@ class RoleServiceTest extends Specification {
         then: 'An exception will be thrown'
         1 * roleJdbcDAO.findById(_ as Long) >> Optional.empty()
         def exception = thrown(ActivityException)
-        exception.error.code == 1
-        exception.error.description.equalsIgnoreCase('Record Not Found')
+        exception.error.code == 1001
+        exception.error.title.equalsIgnoreCase('Record Not Found')
+        exception.errorDescription.equalsIgnoreCase("Role with ID: 1 was not found")
     }
 
     def "Update Role"() {
@@ -104,8 +106,9 @@ class RoleServiceTest extends Specification {
 
         then: 'An Exception is returned'
         def exception = thrown(ActivityException)
-        exception.error.code == 4
-        exception.error.description.equalsIgnoreCase("Invalid Request Payload")
+        exception.error.code == 1004
+        exception.error.title.equalsIgnoreCase("Invalid Request Payload")
+        exception.errorDescription.equalsIgnoreCase("Role ID is required to complete the request")
     }
 
     def "Update Role - Invalid update request payload - description is null"() {
@@ -117,8 +120,9 @@ class RoleServiceTest extends Specification {
 
         then: 'An Exception is returned'
         def exception = thrown(ActivityException)
-        exception.error.code == 4
-        exception.error.description.equalsIgnoreCase("Invalid Request Payload")
+        exception.error.code == 1004
+        exception.error.title.equalsIgnoreCase("Invalid Request Payload")
+        exception.errorDescription.equalsIgnoreCase("Role Description is required to complete the request")
     }
 
     def "Update Role - Exception while updating the record"() {
@@ -132,7 +136,8 @@ class RoleServiceTest extends Specification {
         1 * roleJdbcDAO.findById(_ as Long) >> Optional.of(getRoleMockObj())
         1 * roleJdbcDAO.update(_ as RoleDTO, _ as Long) >> { throw new IllegalArgumentException() }
         def exception = thrown(ActivityException)
-        exception.error.code == 2
-        exception.error.description.equalsIgnoreCase("Unable to update record")
+        exception.error.code == 1002
+        exception.error.title.equalsIgnoreCase("Unable to update record")
+        exception.errorDescription.equalsIgnoreCase("An error occurred while updating a role")
     }
 }

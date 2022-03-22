@@ -38,8 +38,8 @@ class ActionServiceTest extends Specification {
         then: 'An exception is thrown'
         1 * actionJdbcDAO.create(_ as ActionDTO) >> { throw new IllegalArgumentException() }
         def exception = thrown(ActivityException)
-        exception.error.code == 0
-        exception.error.description.equalsIgnoreCase("Unable to save record")
+        exception.error.code == 1000
+        exception.error.title.equalsIgnoreCase("Unable to save record")
     }
 
     def "Get all action list"() {
@@ -75,8 +75,8 @@ class ActionServiceTest extends Specification {
         then: 'Return a list of all actions'
         1 * actionJdbcDAO.findById(_ as Long) >> Optional.empty()
         def exception = thrown(ActivityException)
-        exception.error.code == 1
-        exception.error.description.equalsIgnoreCase("Record Not Found")
+        exception.error.code == 1001
+        exception.error.title.equalsIgnoreCase("Record Not Found")
     }
 
     def "Update Action"() {
@@ -101,8 +101,8 @@ class ActionServiceTest extends Specification {
 
         then: 'An Exception is returned'
         def exception = thrown(ActivityException)
-        exception.error.code == 4
-        exception.error.description.equalsIgnoreCase("Invalid Request Payload")
+        exception.error.code == 1004
+        exception.error.title.equalsIgnoreCase("Invalid Request Payload")
     }
 
     def "Update Action - Invalid update request payload - description is null"() {
@@ -114,8 +114,8 @@ class ActionServiceTest extends Specification {
 
         then: 'An Exception is returned'
         def exception = thrown(ActivityException)
-        exception.error.code == 4
-        exception.error.description.equalsIgnoreCase("Invalid Request Payload")
+        exception.error.code == 1004
+        exception.error.title.equalsIgnoreCase("Invalid Request Payload")
     }
 
     def "Update Action - Exception while updating the record"() {
@@ -129,7 +129,7 @@ class ActionServiceTest extends Specification {
         1 * actionJdbcDAO.findById(_ as Long) >> Optional.of(getActionDTOMock())
         1 * actionJdbcDAO.update(_ as ActionDTO, _ as Long) >> { throw new IllegalArgumentException() }
         def exception = thrown(ActivityException)
-        exception.error.code == 2
-        exception.error.description.equalsIgnoreCase("Unable to update record")
+        exception.error.code == 1002
+        exception.error.title.equalsIgnoreCase("Unable to update record")
     }
 }
