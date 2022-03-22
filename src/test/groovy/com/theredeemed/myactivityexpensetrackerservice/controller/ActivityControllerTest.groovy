@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.theredeemed.myactivityexpensetrackerservice.constants.ApiConstants.ACTIVITY_ENDPOINT_V1
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest(classes = ActivityController.class)
 @AutoConfigureMockMvc
+@Ignore
 class ActivityControllerTest extends Specification {
 
     @Autowired

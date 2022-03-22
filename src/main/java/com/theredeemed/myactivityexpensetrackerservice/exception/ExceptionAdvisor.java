@@ -22,12 +22,18 @@ public class ExceptionAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ActivityException.class)
     public ResponseEntity<Object> handleActivityException(ActivityException activityException,
                                                           WebRequest request) {
-        Map<String, Object> error = new LinkedHashMap<>();
-        error.put("Error Code", activityException.getError().getCode());
-        error.put("Error Message", activityException.getError().getDescription());
-        error.put("Error Details", activityException.getMessage());
-        error.put("Timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+//        Map<String, Object> error = new LinkedHashMap<>();
+//        error.put("Error Code", activityException.getError().getCode());
+//        error.put("Error Title", activityException.getError().getTitle());
+//        error.put("Error Details", activityException.getMessage());
+//        error.put("Timestamp", LocalDateTime.now());
+        ErrorMessage errorMessage = ErrorMessage.builder()
+                .errorCode(activityException.getError().getCode())
+                .errorTitle(activityException.getError().getTitle())
+                .errorDescription(activityException.getErrorDescription())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 
     @Override

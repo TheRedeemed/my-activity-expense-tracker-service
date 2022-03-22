@@ -32,11 +32,11 @@ public class RoleJdbcDAO implements DAO<RoleDTO> {
 
     @Override
     public Optional<RoleDTO> findById(Long id) throws ActivityException {
-        try{
+        try {
             RoleDTO roleDTO = jdbcTemplate.queryForObject(FIND_ROLE_BY_ID_SQL, roleRowMapper, id);
             return Optional.ofNullable(roleDTO);
         } catch (DataAccessException e) {
-            throw new ActivityException(RECORD_NOT_FOUND);
+            throw new ActivityException(RECORD_NOT_FOUND, "Role with ID " + id + " was not found");
         }
     }
 
